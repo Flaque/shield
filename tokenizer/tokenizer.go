@@ -54,5 +54,9 @@ func (t *Tokenizer) Run() []Token {
 		t.listen()
 	}
 
+	if t.toks[len(t.toks)-1].Sym != EOF {
+		t.toks = append(t.toks, NewToken(EOF))
+	}
+
 	return t.toks
 }

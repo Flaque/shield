@@ -17,7 +17,6 @@ const (
 	R_SQUIG
 	PLUS
 	MINUS
-	EQUALS
 	ASSIGN
 	RETURN
 	IS
@@ -45,6 +44,7 @@ var dels = map[string]Symbol{
 	"+": PLUS,
 	"-": MINUS,
 	",": COMMA,
+	"=": ASSIGN,
 }
 
 type Token struct {

@@ -8,22 +8,21 @@ code_blocks
   ;
 
 statement
-  : expr NEW_LINE
+  : assignment NEW_LINE
   | return NEW_LINE
   | func_call
-  | NEW_LINE // Empty lines are cool
   ;
 
 func_def 
-  : 'func' label paren_expr "does" statement "by" statement "end"
+  : 'func' label paren_assignment "does" equals "by" statement "end"
   ;
 
 func_call
-  : label comma_term
+  : label paren_comma_term
   ; 
 
-paren_expr
-  : '(' expr ')'
+paren_assignment
+  : '(' assignment ')'
   ;
 
 paren_index
@@ -34,7 +33,7 @@ paren_comma_term
   : '(' comma_term ')' 
   ;
 
-indexindexindex
+index
   : label
   | label ',' index
   ;
@@ -48,10 +47,13 @@ return
   : 'return' term
   ;
 
-expr
-  : label '=' expr
+assignment
   | label '=' term
   ;
+
+equals
+  | term "is" term 
+  ; 
 
 math
   : term '+' term
@@ -62,6 +64,7 @@ term
   : label
   | literal
   | func_call
+  | equals
   ;
 
 label

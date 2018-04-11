@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/flaque/shield/parser"
 	"github.com/flaque/shield/tokenizer"
 )
 
@@ -15,5 +16,9 @@ func main() {
 	tokens := toko.Run()
 
 	fmt.Println(string(b))
-	fmt.Println(tokens)
+	//fmt.Println(tokens)
+
+	err := parser.NewParser().Run(tokens)
+
+	fmt.Println(err)
 }
