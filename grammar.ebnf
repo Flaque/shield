@@ -1,0 +1,86 @@
+program
+  : code_blocks+ // infinite code_blocks
+  ;
+
+code_blocks
+  : func_def
+  : statement
+  ;
+
+statement
+  : expr NEW_LINE
+  | return NEW_LINE
+  | func_call
+  | NEW_LINE // Empty lines are cool
+  ;
+
+func_def 
+  : 'func' label paren_expr "does" statement "by" statement "end"
+  ;
+
+func_call
+  : label comma_term
+  ; 
+
+paren_expr
+  : '(' expr ')'
+  ;
+
+paren_index
+  : '(' index ')'
+  ;
+
+paren_comma_term
+  : '(' comma_term ')' 
+  ;
+
+indexindexindex
+  : label
+  | label ',' index
+  ;
+
+comma_term
+  : term
+  | term ',' comma_term
+  ;
+
+return 
+  : 'return' term
+  ;
+
+expr
+  : label '=' expr
+  | label '=' term
+  ;
+
+math
+  : term '+' term
+  | term '-' term
+  ;
+
+term
+  : label
+  | literal
+  | func_call
+  ;
+
+label
+  : STRING
+  ;
+
+literal
+  : STRING
+  | INT 
+  ;
+
+STRING
+  : [a-zA-Z]+
+  ;
+
+INT
+  : [0-9]+
+  ;
+
+NEW_LINE
+  : '\n'
+  ;
