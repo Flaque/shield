@@ -7,10 +7,12 @@ import (
 )
 
 type Parser struct {
-	toks    []tok.Token
-	current tok.Token
-	next    tok.Token
-	err     error
+	toks        []tok.Token
+	current     tok.Token
+	next        tok.Token
+	err         error
+	ast         AST
+	current_ast AST
 }
 
 func NewParser() *Parser {
@@ -59,6 +61,8 @@ func (p *Parser) eat(s tok.Symbol) {
 }
 
 func (p *Parser) program() {
+	p.ast = NewASTGroup(PROGRAM)
+	p.current_ast = p.ast
 	p.peak()
 	for p.next.Sym != tok.EOF && p.err == nil {
 		p.code_block()
@@ -66,6 +70,7 @@ func (p *Parser) program() {
 }
 
 func (p *Parser) code_block() {
+	p.current_ast = p.current_ast.addGroup(CODE_BLOCK)
 	if p.next.Sym == tok.FUNC {
 		p.func_def()
 	}
@@ -74,6 +79,8 @@ func (p *Parser) code_block() {
 }
 
 func (p *Parser) statement() {
+	p.current_ast = p.current_ast.addGroup(STATEMENT)
+
 	if p.next.Sym == tok.RETURN {
 		p.returner()
 		return
