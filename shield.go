@@ -2,23 +2,33 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 
+	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"github.com/flaque/shield/parser"
-	"github.com/flaque/shield/tokenizer"
 )
 
+type TreeShapeListener struct {
+	*parser.BaseShieldListener
+}
+
+func NewTreeShapeListener() *TreeShapeListener {
+	return new(TreeShapeListener)
+}
+
+func (this *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
+	fmt.Println(ctx.GetText())
+}
+
 func main() {
-	b, _ := ioutil.ReadFile(os.Args[1])
+	input, _ := antlr.NewFileStream(os.Args[1])
+	lexer := parser.NewShieldLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
+	p := parser.NewShieldParser(stream)
+	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
 
-	toko := tokenizer.NewTokenizer(string(b))
-	tokens := toko.Run()
+	p.BuildParseTrees = true
+	tree := p.Math()
 
-	fmt.Println(string(b))
-	//fmt.Println(tokens)
-
-	err := parser.NewParser().Run(tokens)
-
-	fmt.Println(err)
+	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
 }

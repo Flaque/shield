@@ -1,0 +1,13 @@
+T__0=1
+T__1=2
+NEWLINE=3
+WHITESPACE=4
+STRING=5
+LABEL=6
+INT=7
+ALPHA=8
+IS=9
+'+'=1
+'-'=2
+' '=4
+'is'=9
